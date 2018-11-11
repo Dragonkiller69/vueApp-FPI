@@ -1,28 +1,58 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <v-layout row>
+    <v-flex xs12>
+      <v-card
+        :color="colors[color]"
+        class="custom-ripple"
+        ripple
+        height="300"
+        @click.native="color = (color + 1) % colors.length"
+      >
+        <div class="title white--text pl-3 pt-3">{{ colors[color] }}</div>
+      </v-card>
+    </v-flex>
+   
+    <div
+    v-ripple
+   
+  >
+     <img src="./assets/logo.png" >
   </div>
+  </v-layout>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  export default {
+    data () {
+      return {
+        color: 0,
+        colors: [
+          'red',
+          'pink',
+          'purple',
+          'deep-purple',
+          'indigo',
+          'blue',
+          'light-blue',
+          'cyan',
+          'teal',
+          'green',
+          'light-green',
+          'lime',
+          'yellow',
+          'amber',
+          'orange',
+          'deep-orange',
+          'brown',
+          'blue-grey',
+          'grey'
+        ]
+      }
+    }
   }
-}
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="stylus">
+  .custom-ripple
+    user-select: none
 </style>
