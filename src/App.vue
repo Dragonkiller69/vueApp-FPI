@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="show('custom-template')">
+    <button @click="show('foo-css','error')">
       show top left
     </button>
     <v-card class="col-xs-2 col-sm-2 white--text carta" v-ripple="{ class: 'black--text' }" v-for="(cliente, index) in clientes"
@@ -53,6 +53,8 @@
           </div>
         </template>
       </notifications>
+
+       <notifications group="foo-css" position="top left" :speed="500" />
     </div>
   </div>
 </template>
@@ -120,9 +122,10 @@
 
 <style scoped>
   .carta {
-    filter: blur(0.17px);
+    filter: blur(0.16px);
+    filter: brightness(95%);
     transition: filter 500ms;
-    transition: box-shadow 0.6s;
+    transition: box-shadow 0.4s;
     margin: 10px;
     padding: 0%;
     width: 20%;
@@ -173,7 +176,7 @@
   }
 
   .botones {
-    background-color: #004d40;
+    background-color: #263238;
     align-content: center;
     position: relative;
     padding-left: 30px;
@@ -192,7 +195,7 @@
 
   .carta:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 15px 0 rgba(0, 0, 0, 0.19);
-    filter: brightness(103%);
+    filter: brightness(102%);
   }
 </style>
 
