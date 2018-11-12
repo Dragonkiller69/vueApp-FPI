@@ -5,10 +5,10 @@
     </button>
     <v-card class="col-xs-2 col-sm-2 white--text carta" v-ripple="{ class: 'black--text' }" v-for="(cliente, index) in clientes"
       :key="index" color="white">
-      <v-flex class="text-center">
+      <v-flex class="text-center" @click="getCliente(cliente), showM(true,true)">
         <v-img :src="cliente.picture.large" aspect-ratio="1" class="imagen img-responsive img-circle center-block">
           <div class="circle__spin img-responsive">
-            <svg  viewBox="0 0 100 100">
+            <svg viewBox="0 0 100 100">
               <defs>
                 <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" stop-color="#8a3ab9" />
@@ -33,28 +33,25 @@
     </v-card>
 
     <div>
-      <notifications group="custom-template" :duration="5000" :width="500" animation-name="v-fade-left" position="top left">
+      <notifications group="foo-css" position="top left" :speed="500" />
 
-        <template slot="body" slot-scope="props">
-          <div class="custom-template">
-            <div class="custom-template-icon">
-              <i class="icon ion-android-checkmark-circle"></i>
-            </div>
-            <div class="custom-template-content">
-              <div class="custom-template-title">
-                {{props.item.title}}
-              </div>
-              <div class="custom-template-text" v-html="props.item.text"></div>
-            </div>
-            <div class="custom-template-close" @click="props.close">
-              <i class="icon ion-android-close"></i>
-            </div>
+      <modal name="hello-world" transition="nice-modal-fade" :delay="100" :adaptive="adaptive" :draggable="draggable">
+        <div class="row" v-if="cliente">
+          <img v-bind:src="cliente.picture.large" class="img-responsive img-circle col-sm-4">
+          <div class="col-sm-7">
+            <div class="well text-capitalize" >
+              <p><strong> {{cliente.name.title+" "+cliente.name.first+" "+cliente.name.last}} </strong></p>
+              <p><strong>Genero:</strong> {{cliente.gender}} </p>
+              <p><span class="glyphicon glyphicon-gift"></span> {{cliente.dob.date}} ({{cliente.dob.age}}) </p>
+              <p><span class="glyphicon glyphicon-phone"></span> {{cliente.phone}} </p>
+              <p><span class="glyphicon glyphicon-envelope"></span> {{cliente.email}} </p>
+              <p><span class="glyphicon glyphicon-globe"></span> {{cliente.location.city}} </p>
 
+            </div>
           </div>
-        </template>
-      </notifications>
+        </div>
+      </modal>
 
-       <notifications group="foo-css" position="top left" :speed="500" />
     </div>
   </div>
 </template>
@@ -69,7 +66,10 @@
         clientes: null,
         cantidad: 10,
         cliente: null,
-        back: ""
+        back: "",
+        adaptive: false,
+        draggable: false,
+        fecha: null,
       };
     },
     beforeMount() {
@@ -84,14 +84,18 @@
             console.log(response);
           });
       },
+
       aceptarCliente(index) {
         this.clientes.splice(index, 1);
       },
+
       getCliente(client) {
         this.cliente = client;
-        this.show = true;
+        this.fecha = this.cliente.dob.date;
+        console.log(this.fecha);
         console.log(this.cliente.name.first);
       },
+
       show(group, type = "") {
         const text = `
         This is notification text!
@@ -107,6 +111,15 @@
             randomNumber: Math.random()
           }
         });
+      },
+
+      showM(adaptive, draggable) {
+        this.adaptive = adaptive;
+        this.draggable = draggable;
+        this.$modal.show("hello-world");
+      },
+      hide() {
+        this.$modal.hide("hello-world");
       }
     }
   };
@@ -138,22 +151,25 @@
     margin-bottom: 0%;
     padding: 0%;
     width: 60%;
-  
   }
 
   .circle__spin {
     left: 0%;
     top: 0%;
     position: absolute;
+    animation-fill-mode: forwards;
   }
 
   .circle__spin svg {
     width: auto;
     height: auto;
+    transition: animation 2s;
+    animation-fill-mode: forwards;
   }
 
   svg:hover {
-     animation: spin 1s linear infinite;
+    stroke-dasharray: 2, 1;
+    animation: spin 5s ease-in-out infinite;
   }
 
   @keyframes spin {

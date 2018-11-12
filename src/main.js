@@ -5,7 +5,9 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'bootstrap'
 import Notifications from 'vue-notification'
- 
+import VModal from 'vue-js-modal'
+
+Vue.use(VModal)
 Vue.use(Vuetify)
 Vue.use(Notifications)
 Vue.config.productionTip = false
