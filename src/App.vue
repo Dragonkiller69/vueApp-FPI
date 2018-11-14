@@ -1,61 +1,73 @@
 <template>
   <div>
-    <button @click="show('foo-css','error')">
-      show top left
-    </button>
-    <v-card class="col-xs-2 col-sm-2 white--text carta" v-ripple="{ class: 'black--text' }" v-for="(cliente, index) in clientes"
-      :key="index" color="white">
-      <v-flex class="text-center" @click="getCliente(cliente), showM(true,true)">
-        <v-img :src="cliente.picture.large" aspect-ratio="1" class="imagen img-responsive img-circle center-block">
-          <div class="circle__spin img-responsive">
-            <svg viewBox="0 0 100 100">
-              <defs>
-                <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#8a3ab9" />
-                  <stop offset="100%" stop-color="#f00" />
-                </linearGradient>
-              </defs>
-              <circle cx="50" cy="50" r="49" stroke="url(#gradient)" stroke-width="2" fill="none" transform='rotate(90 50 50)' />
-            </svg>
-          </div>
-        </v-img>
-        <div class="titulo">
-          <div>
-            <h4 class="text-capitalize nombre">{{cliente.name.title}} {{cliente.name.first}} {{cliente.name.last}}</h4>
-            <hr>
-          </div>
-        </div>
-      </v-flex>
-      <v-card-actions class="center-block botones">
-        <v-btn flat color="white darken-4" @click="aceptarCliente(index)">Aceptar</v-btn>
-        <v-btn flat color="white darken-4">Rechazar</v-btn>
-      </v-card-actions>
-    </v-card>
-
-    <div>
-      <notifications group="foo-css" position="top left" :speed="500" />
-
-      <modal name="hello-world" transition="nice-modal-fade" :delay="100" :adaptive="adaptive" :draggable="draggable">
-        <div class="row" v-if="cliente">
-          <img v-bind:src="cliente.picture.large" class="img-responsive img-circle col-sm-4">
-          <div class="col-sm-7">
-            <div class="well text-capitalize" >
-              <p><strong> {{cliente.name.title+" "+cliente.name.first+" "+cliente.name.last}} </strong></p>
-              <p><strong>Genero:</strong> {{cliente.gender}} </p>
-              <p><span class="glyphicon glyphicon-gift"></span> {{cliente.dob.date}} ({{cliente.dob.age}}) </p>
-              <p><span class="glyphicon glyphicon-phone"></span> {{cliente.phone}} </p>
-              <p><span class="glyphicon glyphicon-envelope"></span> {{cliente.email}} </p>
-              <p><span class="glyphicon glyphicon-globe"></span> {{cliente.location.city}} </p>
-
+    <!-- navigation bar -->
+    <div class="title">
+      <h1 class="text-center principal ">Sistema de Ofertas por Llamada Telefonico</h1>
+      <hr>
+      <div class="row filtros">
+        <v-card>
+          <v-card-text>
+            <v-slider v-model="value" step="10" thumb-label ticks></v-slider>
+          </v-card-text>
+        </v-card>
+        <v-text-field class="filtro" color="white" label="Filtrar" hint="Ingrese el nombre que desea filtrar" v-model="search"></v-text-field>
+      </div>
+    </div>
+    <!-- cards, modal notification -->
+    <div class="cardwrapper">
+      <v-card class="col-xs-1 col-sm-1 white--text carta" v-ripple="{class: 'black--text'}" v-for="(cliente, index) in filter"
+        :key="index" color="white">
+        <v-flex class="text-center" @click="getCliente(cliente), showM(true,true)">
+          <v-img :src="cliente.picture.large" aspect-ratio="1" class="imagen img-responsive img-circle center-block">
+            <div class="circle__spin img-responsive">
+              <svg viewBox="0 0 100 100">
+                <defs>
+                  <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#8a3ab9" />
+                    <stop offset="100%" stop-color="#f00" />
+                  </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="49" stroke="url(#gradient)" stroke-width="2" fill="none" transform='rotate(90 50 50)' />
+              </svg>
+            </div>
+          </v-img>
+          <div class="titulo">
+            <div>
+              <h4 class="text-capitalize nombre">{{cliente.name.title}} {{cliente.name.first}} {{cliente.name.last}}</h4>
+              <hr>
             </div>
           </div>
-        </div>
-      </modal>
+        </v-flex>
+        <v-card-actions class="center-block botones">
+          <v-btn flat color="white darken-4" @click="aceptarCliente(index)">Aceptar</v-btn>
+          <v-btn flat color="white darken-4">Rechazar</v-btn>
+        </v-card-actions>
+      </v-card>
 
+      <div>
+        <notifications group="foo-css" position="top left" :speed="500" />
+
+        <modal name="hello-world" transition="nice-modal-fade" :delay="100" :adaptive="adaptive" :draggable="draggable">
+          <div class="row" v-if="cliente">
+            <img v-bind:src="cliente.picture.large" class="img-responsive img-circle col-sm-4">
+            <div class="col-sm-7">
+              <div class="well text-capitalize">
+                <p><strong> {{cliente.name.title+" "+cliente.name.first+" "+cliente.name.last}} </strong></p>
+                <p><strong>Genero:</strong> {{cliente.gender}} </p>
+                <p><span class="glyphicon glyphicon-gift"></span> {{cliente.dob.date}} ({{cliente.dob.age}}) </p>
+                <p><span class="glyphicon glyphicon-phone"></span> {{cliente.phone}} </p>
+                <p><span class="glyphicon glyphicon-envelope"></span> {{cliente.email}} </p>
+                <p><span class="glyphicon glyphicon-globe"></span> {{cliente.location.city}} </p>
+
+              </div>
+            </div>
+          </div>
+        </modal>
+
+      </div>
     </div>
   </div>
 </template>
-
 
 
 <script>
@@ -70,10 +82,26 @@
         adaptive: false,
         draggable: false,
         fecha: null,
+        search: "",
+        value: 0
       };
     },
     beforeMount() {
       this.getClientes();
+    },
+    computed: {
+      filter() {
+        if (this.clientes != null) {
+          console.log(this.search);
+          let clients = "";
+          clients = this.clientes;
+          return clients.filter(cliente => {
+            return cliente.name.first
+              .toLowerCase()
+              .includes(this.search.toLowerCase());
+          });
+        }
+      }
     },
     methods: {
       getClientes() {
@@ -134,85 +162,6 @@
 </style>
 
 <style scoped>
-  .carta {
-    filter: blur(0.16px);
-    filter: brightness(95%);
-    transition: filter 500ms;
-    transition: box-shadow 0.4s;
-    margin: 10px;
-    padding: 0%;
-    width: 20%;
-    height: 100%;
-  }
-
-  .imagen {
-    position: relative;
-    margin-top: 5%;
-    margin-bottom: 0%;
-    padding: 0%;
-    width: 60%;
-  }
-
-  .circle__spin {
-    left: 0%;
-    top: 0%;
-    position: absolute;
-    animation-fill-mode: forwards;
-  }
-
-  .circle__spin svg {
-    width: auto;
-    height: auto;
-    transition: animation 2s;
-    animation-fill-mode: forwards;
-  }
-
-  svg:hover {
-    stroke-dasharray: 2, 1;
-    animation: spin 5s ease-in-out infinite;
-  }
-
-  @keyframes spin {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  .titulo {
-    text-align: center;
-    color: black;
-    margin-top: 0%;
-    padding-top: 0%;
-    padding-left: 2px;
-    padding-right: 2px;
-  }
-
-  .nombre {
-    margin-bottom: 2px;
-  }
-
-  .botones {
-    background-color: #263238;
-    align-content: center;
-    position: relative;
-    padding-left: 30px;
-  }
-
-  hr {
-    margin: 5%;
-    margin-top: 0%;
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right,
-      rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 0.75),
-      rgba(0, 0, 0, 0));
-  }
-
-  .carta:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 15px 0 rgba(0, 0, 0, 0.19);
-    filter: brightness(102%);
-  }
 </style>
 
 <style>
