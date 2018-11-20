@@ -13,7 +13,7 @@ padding: 0px;
 }
 
 .filtro{
-  width: 30%;
+  width: 60%;
   padding-left: 30px;
   color: aqua;
 }
@@ -129,4 +129,10 @@ padding: 0px;
       rgba(0, 0, 0, 0),
       rgba(0, 0, 0, 0.75),
       rgba(0, 0, 0, 0));
+  }
+
+  .va {
+    margin-top: 3%;
+    padding-left: 5%;
+    color: white;
   }
